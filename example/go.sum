@@ -55,8 +55,8 @@ github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UV
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
 github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
-github.com/worldline-go/igmigrator/v2 v2.0.2 h1:HdxZ/jAZD8z9UBH4i5Wg9WfigdAdz4HyuzXJ+jOqCe8=
-github.com/worldline-go/igmigrator/v2 v2.0.2/go.mod h1:tYxNstlzi9KF5CRT8HHoxc6MntZITM5BqE6FPAegaD0=
+github.com/worldline-go/igmigrator/v2 v2.1.0 h1:tjEjWbH8g0X2IBSvigZuwG8Pfa1/kRR9p+NLMqFv6Ng=
+github.com/worldline-go/igmigrator/v2 v2.1.0/go.mod h1:+NfKX6fpwYthyaSUv1/nGPUyFyFcyPdJoG9Epl/FZMM=
 github.com/worldline-go/initializer v0.5.0 h1:SFw1i9pIkvBNJW0FOjeY0nzrV2dF3FbUsvJ0VxgzHGo=
 github.com/worldline-go/initializer v0.5.0/go.mod h1:D2kY4ybHESPxcfzqTtokZAe6bPD+A7Zo5QP2toVa9Fs=
 github.com/worldline-go/logz v0.5.1 h1:jpbKUd1FbecEzs7/p1zFH7tFtQ5demmc89Fa2YTHL/Q=

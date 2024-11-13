@@ -8,6 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/shopspring/decimal"
 	"github.com/worldline-go/initializer"
+	"github.com/worldline-go/types"
 	"github.com/worldline-go/types/example/database"
 	"github.com/worldline-go/types/example/handler"
 )
@@ -45,7 +46,8 @@ func run(ctx context.Context) error {
 			"to":    "Amsterdam",
 			"value": 123.65,
 		},
-		Price: sql.Null[decimal.Decimal]{V: price, Valid: true},
+		Additionals: types.Raw(`{"key": "value"}`),
+		Price:       sql.Null[decimal.Decimal]{V: price, Valid: true},
 	})
 	if err != nil {
 		return err
@@ -70,9 +72,24 @@ func run(ctx context.Context) error {
 
 	log.Info().RawJSON("details", details).Msg("Train Details")
 
+	additionals, err := train.Additionals.ToMap()
+	if err != nil {
+		return err
+	}
+
+	log.Info().Interface("additionals", additionals).Msg("Train Additionals")
+
 	// ////////////////////////////////////////
 	// Update train to set back as null in database
 	train.Details = nil
+	train.Additionals = nil
+
+	trainRaw, err := json.Marshal(train)
+	if err != nil {
+		return err
+	}
+
+	log.Info().RawJSON("train", trainRaw).Msg("Train Update")
 
 	if err := dbHandler.UpdateTrain(ctx, id, train); err != nil {
 		return err
@@ -86,7 +103,8 @@ func run(ctx context.Context) error {
 	}
 
 	// Details now is nil
-	log.Info().Interface("details", train.Details).Str("price", train.Price.V.String()).Msg("Train Updated")
+	log.Info().Interface("details", train.Details).Interface("additionals", train.Additionals).
+		Str("price", train.Price.V.String()).Msg("Train Updated")
 
 	return nil
 }

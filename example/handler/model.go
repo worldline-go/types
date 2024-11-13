@@ -8,7 +8,8 @@ import (
 )
 
 type Train struct {
-	ID      int64                     `db:"id"      goqu:"skipinsert"`
-	Details types.Map                 `db:"details"`
-	Price   sql.Null[decimal.Decimal] `db:"price"`
+	ID          int64                     `db:"id"          goqu:"skipinsert"`
+	Details     types.Map                 `db:"details"     json:"details,omitempty"`
+	Additionals types.Raw                 `db:"additionals" json:"additionals,omitempty"`
+	Price       sql.Null[decimal.Decimal] `db:"price"`
 }

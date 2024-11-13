@@ -11,7 +11,7 @@ require (
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/rs/zerolog v1.33.0
 	github.com/shopspring/decimal v1.4.0
-	github.com/worldline-go/igmigrator/v2 v2.0.2
+	github.com/worldline-go/igmigrator/v2 v2.1.0
 	github.com/worldline-go/initializer v0.5.0
 	github.com/worldline-go/types v0.0.0-00010101000000-000000000000
 )

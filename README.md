@@ -24,6 +24,16 @@ type Train struct {
 }
 ```
 
+### types.Raw
+
+`[]byte` type behind, same as `json.RawMessage` with scan and value methods.
+
+```go
+type Train struct {
+	Details types.Raw `db:"details"`
+}
+```
+
 ---
 
 ### decimal.Decimal
