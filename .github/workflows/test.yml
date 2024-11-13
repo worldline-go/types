@@ -14,6 +14,10 @@ jobs:
     - uses: actions/setup-go@v4
       with:
         go-version: '1.23' # The Go version to download (if necessary) and use.
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        args: --timeout 5m --new-from-rev=HEAD~1 --issues-exit-code=0
     - name: Run tests
       run: |
         GOPATH="$(dirname ${PWD})" golangci-lint run --out-format checkstyle --issues-exit-code=0 ./... > golangci-lint-report.out
