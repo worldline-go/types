@@ -46,7 +46,7 @@ func run(ctx context.Context) error {
 			"to":    "Amsterdam",
 			"value": 123.65,
 		},
-		Additionals: types.Raw(`{"key": "value"}`),
+		Additionals: types.RawJSON(`{"key": "value"}`),
 		Price:       sql.Null[decimal.Decimal]{V: price, Valid: true},
 	})
 	if err != nil {

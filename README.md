@@ -18,19 +18,21 @@ go get github.com/worldline-go/types
 
 Map based on `map[string]interface{}` and null values stay as nil.
 
+> This type not convert to base64 when marshaling, it is directly a json string.
+
 ```go
 type Train struct {
 	Details types.Map `db:"details"`
 }
 ```
 
-### types.Raw
+### types.RawJSON
 
 `[]byte` type behind, same as `json.RawMessage` with scan and value methods.
 
 ```go
 type Train struct {
-	Details types.Raw `db:"details"`
+	Details types.RawJSON `db:"details"`
 }
 ```
 

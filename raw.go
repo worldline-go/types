@@ -5,10 +5,10 @@ import (
 	"fmt"
 )
 
-// Raw same functionality with json.RawMessage and scan and value methods.
-type Raw []byte
+// RawJSON same functionality with json.RawMessage and scan and value methods.
+type RawJSON []byte
 
-func (r *Raw) Scan(value interface{}) error {
+func (r *RawJSON) Scan(value interface{}) error {
 	var source []byte
 	switch v := value.(type) {
 	case []byte:
@@ -28,7 +28,7 @@ func (r *Raw) Scan(value interface{}) error {
 	return nil
 }
 
-func (r Raw) Value() (driver.Value, error) {
+func (r RawJSON) Value() (driver.Value, error) {
 	if r == nil {
 		return nil, nil
 	}
@@ -36,7 +36,7 @@ func (r Raw) Value() (driver.Value, error) {
 	return []byte(r), nil
 }
 
-func (r Raw) ToMap() (Map, error) {
+func (r RawJSON) ToMap() (Map, error) {
 	if r == nil {
 		return nil, nil
 	}
@@ -51,7 +51,7 @@ func (r Raw) ToMap() (Map, error) {
 }
 
 // MarshalJSON returns m as the JSON encoding of m.
-func (r Raw) MarshalJSON() ([]byte, error) {
+func (r RawJSON) MarshalJSON() ([]byte, error) {
 	if r == nil {
 		return []byte("null"), nil
 	}
@@ -60,7 +60,7 @@ func (r Raw) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON sets *m to a copy of data.
-func (r *Raw) UnmarshalJSON(data []byte) error {
+func (r *RawJSON) UnmarshalJSON(data []byte) error {
 	if r == nil {
 		return fmt.Errorf("nil pointer, %w", ErrUnsupportedType)
 	}
