@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/rs/zerolog/log"
 	"github.com/shopspring/decimal"
@@ -40,8 +41,9 @@ func run(ctx context.Context) error {
 
 	id, err := dbHandler.CreateTrain(ctx, &handler.Train{
 		Details: map[string]interface{}{
-			"from": "Istanbul",
-			"to":   "Amsterdam",
+			"from":  "Istanbul",
+			"to":    "Amsterdam",
+			"value": 123.65,
 		},
 		Price: sql.Null[decimal.Decimal]{V: price, Valid: true},
 	})
@@ -59,6 +61,14 @@ func run(ctx context.Context) error {
 	}
 
 	log.Info().Interface("details", train.Details).Str("price", train.Price.V.String()).Msg("Train")
+	log.Info().Stringer("value", train.Details["value"].(json.Number)).Msg("Train Details")
+
+	details, err := json.Marshal(train.Details)
+	if err != nil {
+		return err
+	}
+
+	log.Info().RawJSON("details", details).Msg("Train Details")
 
 	// ////////////////////////////////////////
 	// Update train to set back as null in database

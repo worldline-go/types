@@ -1,9 +1,10 @@
 package types
 
 import (
+	"bytes"
 	"database/sql/driver"
 	"encoding/json"
-	"errors"
+	"fmt"
 )
 
 type Map map[string]interface{}
@@ -12,23 +13,30 @@ func (m *Map) Scan(value interface{}) error {
 	switch v := value.(type) {
 	case []byte:
 		// Parse the JSON data
-		err := json.Unmarshal(v, &m)
-		if err != nil {
+		decoder := json.NewDecoder(bytes.NewReader(v))
+		decoder.UseNumber()
+
+		if err := decoder.Decode(m); err != nil {
 			return err
 		}
+
 		return nil
 	case string:
 		// Parse the JSON string
-		err := json.Unmarshal([]byte(v), &m)
-		if err != nil {
+		decoder := json.NewDecoder(bytes.NewReader([]byte(v)))
+		decoder.UseNumber()
+
+		if err := decoder.Decode(m); err != nil {
 			return err
 		}
+
 		return nil
 	case nil:
 		*m = nil
+
 		return nil
 	default:
-		return errors.New("unsupported type for Map scan")
+		return fmt.Errorf("%T, %w", value, ErrUnsupportedType)
 	}
 }
 
