@@ -38,34 +38,15 @@ type Train struct {
 
 ---
 
-### decimal.Decimal OR json.Number
+### string, json.Number OR decimal.Decimal
 
-To use `decimal.Decimal` type, you need to install `github.com/shopspring/decimal` package.  
-Or use `json.Number` type for json number values and after that convert to `decimal.Decimal`.
+> Use `decimal.Decimal` always for calculations.
+
+To use `decimal.Decimal` type from `github.com/shopspring/decimal` package.  
+Use `json.Number` type for json number values and after that convert to `decimal.Decimal`.  
+Use `string` type to direct get numeric values as string and convert to `decimal.Decimal`.
 
 Use with nullable `sql.Null` package or pointer.
-
-And need to add directly in driver, example for `pgx`, check in [connect.go](./example/database/connect.go).
-
-<details><summary>PGX Connect</summary>
-
-```go
-func pgxConnect(ctx context.Context, uri string) (*sqlx.DB, error) {
-	connConfig, _ := pgx.ParseConfig(uri)
-	afterConnect := stdlib.OptionAfterConnect(func(_ context.Context, conn *pgx.Conn) error {
-		// Register decimal type
-		pgxdecimal.Register(conn.TypeMap())
-
-		return nil
-	})
-
-	db := sqlx.NewDb(stdlib.OpenDB(*connConfig, afterConnect), "pgx")
-
-	err := db.PingContext(ctx)
-
-	return db, err
-}
-```
 
 In struct use like this:
 

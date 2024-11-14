@@ -45,10 +45,13 @@ func run(ctx context.Context) error {
 			"from":  "Istanbul",
 			"to":    "Amsterdam",
 			"value": 123.65,
+			"peron": 5,
 		},
-		Additionals: types.RawJSON(`{"key": "value"}`),
-		Price:       sql.Null[json.Number]{Valid: true, V: json.Number(price.String())},
-		LastPrice:   sql.Null[decimal.Decimal]{Valid: true, V: price},
+		Additionals:  types.RawJSON(`{"key": "value"}`),
+		Price:        sql.Null[json.Number]{Valid: true, V: json.Number(price.String())},
+		LastPrice:    sql.Null[decimal.Decimal]{Valid: true, V: price},
+		Rate:         sql.Null[string]{Valid: true, V: "5.87"},
+		CustomNumber: sql.Null[string]{Valid: true, V: "123456"},
 	})
 	if err != nil {
 		return err
@@ -63,8 +66,12 @@ func run(ctx context.Context) error {
 		return err
 	}
 
-	log.Info().Interface("details", train.Details).Str("price", train.Price.V.String()).Msg("Train Get")
-	log.Info().Stringer("value", train.Details["value"].(json.Number)).Msg("Train Get")
+	log.Info().Interface("details", train.Details).Str("price", train.Price.V.String()).
+		Stringer("value", train.Details["value"].(json.Number)).
+		Str("peron", train.Details["peron"].(json.Number).String()).
+		Str("rate", train.Rate.V).
+		Str("custom_number", train.CustomNumber.V).
+		Msg("Train Get")
 
 	details, err := json.Marshal(train.Details)
 	if err != nil {
@@ -107,6 +114,7 @@ func run(ctx context.Context) error {
 	log.Info().Interface("details", train.Details).Interface("additionals", train.Additionals).
 		Str("price", train.Price.V.String()).
 		Str("last_price", train.LastPrice.V.String()).
+		Str("rate", train.Rate.V).
 		Msg("Train Updated")
 
 	return nil
