@@ -38,11 +38,16 @@ type Train struct {
 
 ---
 
-### decimal.Decimal
+### decimal.Decimal OR json.Number
 
-To use `decimal.Decimal` type, you need to install `github.com/shopspring/decimal` package.
+To use `decimal.Decimal` type, you need to install `github.com/shopspring/decimal` package.  
+Or use `json.Number` type for json number values and after that convert to `decimal.Decimal`.
+
+Use with nullable `sql.Null` package or pointer.
 
 And need to add directly in driver, example for `pgx`, check in [connect.go](./example/database/connect.go).
+
+<details><summary>PGX Connect</summary>
 
 ```go
 func pgxConnect(ctx context.Context, uri string) (*sqlx.DB, error) {
@@ -62,15 +67,20 @@ func pgxConnect(ctx context.Context, uri string) (*sqlx.DB, error) {
 }
 ```
 
-Use with nullable `sql.Null` package or pointer.
+In struct use like this:
 
 ```go
+
 type Train struct {
-	ID      int64                     `db:"id"      goqu:"skipinsert"`
-	Details types.Map                 `db:"details"`
-	Price   sql.Null[decimal.Decimal] `db:"price"`
+	ID          int64                     `db:"id"          goqu:"skipinsert"`
+	Details     types.Map                 `db:"details"     json:"details,omitempty"`
+	Additionals types.RawJSON             `db:"additionals" json:"additionals,omitempty"`
+	Price       sql.Null[json.Number]     `db:"price"`
+	LastPrice   sql.Null[decimal.Decimal] `db:"last_price"`
 }
 ```
+
+</details>
 
 ## Development
 

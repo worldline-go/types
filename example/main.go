@@ -47,7 +47,8 @@ func run(ctx context.Context) error {
 			"value": 123.65,
 		},
 		Additionals: types.RawJSON(`{"key": "value"}`),
-		Price:       sql.Null[decimal.Decimal]{V: price, Valid: true},
+		Price:       sql.Null[json.Number]{Valid: true, V: json.Number(price.String())},
+		LastPrice:   sql.Null[decimal.Decimal]{Valid: true, V: price},
 	})
 	if err != nil {
 		return err
@@ -62,22 +63,22 @@ func run(ctx context.Context) error {
 		return err
 	}
 
-	log.Info().Interface("details", train.Details).Str("price", train.Price.V.String()).Msg("Train")
-	log.Info().Stringer("value", train.Details["value"].(json.Number)).Msg("Train Details")
+	log.Info().Interface("details", train.Details).Str("price", train.Price.V.String()).Msg("Train Get")
+	log.Info().Stringer("value", train.Details["value"].(json.Number)).Msg("Train Get")
 
 	details, err := json.Marshal(train.Details)
 	if err != nil {
 		return err
 	}
 
-	log.Info().RawJSON("details", details).Msg("Train Details")
+	log.Info().RawJSON("details", details).Msg("Train Get Details with RawJSON")
 
 	additionals, err := train.Additionals.ToMap()
 	if err != nil {
 		return err
 	}
 
-	log.Info().Interface("additionals", additionals).Msg("Train Additionals")
+	log.Info().Interface("additionals", additionals).Msg("Train Get Additional with ToMap")
 
 	// ////////////////////////////////////////
 	// Update train to set back as null in database
@@ -89,7 +90,7 @@ func run(ctx context.Context) error {
 		return err
 	}
 
-	log.Info().RawJSON("train", trainRaw).Msg("Train Update")
+	log.Info().RawJSON("train", trainRaw).Msg("Train Data For Update")
 
 	if err := dbHandler.UpdateTrain(ctx, id, train); err != nil {
 		return err
@@ -104,7 +105,9 @@ func run(ctx context.Context) error {
 
 	// Details now is nil
 	log.Info().Interface("details", train.Details).Interface("additionals", train.Additionals).
-		Str("price", train.Price.V.String()).Msg("Train Updated")
+		Str("price", train.Price.V.String()).
+		Str("last_price", train.LastPrice.V.String()).
+		Msg("Train Updated")
 
 	return nil
 }
