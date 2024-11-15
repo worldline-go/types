@@ -46,18 +46,17 @@ To use `decimal.Decimal` type from `github.com/shopspring/decimal` package.
 Use `json.Number` type for json number values and after that convert to `decimal.Decimal`.  
 Use `string` type to direct get numeric values as string and convert to `decimal.Decimal`.
 
-Use with nullable `sql.Null` package or pointer.
+Use with nullable `sql.Null[decimal.Decimal]` package or pointer or `decimal.NullDecimal` type.
 
 In struct use like this:
 
 ```go
-
 type Train struct {
 	ID          int64                     `db:"id"          goqu:"skipinsert"`
 	Details     types.Map                 `db:"details"     json:"details,omitempty"`
 	Additionals types.RawJSON             `db:"additionals" json:"additionals,omitempty"`
 	Price       sql.Null[json.Number]     `db:"price"`
-	LastPrice   sql.Null[decimal.Decimal] `db:"last_price"`
+	LastPrice   decimal.NullDecimal       `db:"last_price"`
 }
 ```
 

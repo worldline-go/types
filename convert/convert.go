@@ -3,6 +3,8 @@ package convert
 import (
 	"database/sql"
 	"time"
+
+	"github.com/worldline-go/types"
 )
 
 func SQLNullToPtr[T any](v sql.Null[T]) *T {
@@ -13,18 +15,54 @@ func SQLNullToPtr[T any](v sql.Null[T]) *T {
 	return nil
 }
 
-func TimeFormatPtr(v *time.Time, opts ...OptionTime) *string {
+// ////////////////////////////////////////
+// Time conversion functions
+
+func TimeToStringPtr(v *time.Time, opts ...OptionTime) *string {
 	if v == nil || v.IsZero() {
 		return nil
 	}
 
-	o := apply(opts)
-
-	if o.TimeFormat == "" {
-		o.TimeFormat = time.RFC3339
-	}
-
-	str := v.Format(o.TimeFormat)
+	str := v.Format(apply(opts).TimeFormat)
 
 	return &str
+}
+
+func StringToTime(v string, opts ...OptionTime) (time.Time, error) {
+	t, err := time.Parse(apply(opts).TimeFormat, v)
+
+	return t, err
+}
+
+func StringPtrToTime(v *string, opts ...OptionTime) (time.Time, error) {
+	if v == nil {
+		return time.Time{}, nil
+	}
+
+	return StringToTime(*v, opts...)
+}
+
+func StringPtrToTimePtr(v *string, opts ...OptionTime) (*time.Time, error) {
+	if v == nil {
+		return nil, nil
+	}
+
+	t, err := StringToTime(*v, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	return &t, nil
+}
+
+// ////////////////////////////////////////
+
+func BytesToMap(v []byte) (types.Map, error) {
+	m := make(types.Map)
+
+	if err := m.Scan(v); err != nil {
+		return nil, err
+	}
+
+	return m, nil
 }

@@ -49,7 +49,7 @@ func run(ctx context.Context) error {
 		},
 		Additionals:  types.RawJSON(`{"key": "value"}`),
 		Price:        sql.Null[json.Number]{Valid: true, V: json.Number(price.String())},
-		LastPrice:    sql.Null[decimal.Decimal]{Valid: true, V: price},
+		LastPrice:    decimal.NullDecimal{Valid: true, Decimal: price},
 		Rate:         sql.Null[string]{Valid: true, V: "5.87"},
 		CustomNumber: sql.Null[string]{Valid: true, V: "123456"},
 	})
@@ -113,7 +113,7 @@ func run(ctx context.Context) error {
 	// Details now is nil
 	log.Info().Interface("details", train.Details).Interface("additionals", train.Additionals).
 		Str("price", train.Price.V.String()).
-		Str("last_price", train.LastPrice.V.String()).
+		Str("last_price", train.LastPrice.Decimal.String()).
 		Str("rate", train.Rate.V).
 		Msg("Train Updated")
 

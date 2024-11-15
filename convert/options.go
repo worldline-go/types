@@ -1,5 +1,7 @@
 package convert
 
+import "time"
+
 type (
 	Option     optioner
 	OptionTime optioner
@@ -36,6 +38,10 @@ func apply[T optioner](opts []T) *options {
 
 	for _, opt := range opts {
 		opt.Apply(o)
+	}
+
+	if o.TimeFormat == "" {
+		o.TimeFormat = time.RFC3339
 	}
 
 	return o

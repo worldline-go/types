@@ -53,7 +53,7 @@ func TestTimeFormatPtr(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := TimeFormatPtr(tt.args.v, tt.args.opts...)
+			got := TimeToStringPtr(tt.args.v, tt.args.opts...)
 
 			if tt.wantNil {
 				if got != nil {
