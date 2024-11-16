@@ -3,55 +3,43 @@ package convert
 import "time"
 
 type (
-	Option     optioner
-	OptionTime optioner
+	OptionTime func(o *optionTime)
 )
 
 // ///////////////////////////////////////////////////////////////////////////
-// interface holder
 
-type optioner interface {
-	Apply(opt *options)
+type defaulter interface {
+	Default()
 }
 
-type optionHandler struct {
-	apply func(*options)
-}
-
-func (o *optionHandler) Apply(opt *options) {
-	o.apply(opt)
-}
-
-func newOptionHandler(apply func(*options)) *optionHandler {
-	return &optionHandler{apply: apply}
-}
-
-// ///////////////////////////////////////////////////////////////////////////
-// main options
-
-type options struct {
-	TimeFormat string
-}
-
-func apply[T optioner](opts []T) *options {
-	o := &options{}
-
-	for _, opt := range opts {
-		opt.Apply(o)
+func apply[T any, O ~func(*T)](opts []O) *T {
+	opt := new(T)
+	for _, o := range opts {
+		o(opt)
 	}
 
-	if o.TimeFormat == "" {
-		o.TimeFormat = time.RFC3339
+	if d, ok := any(opt).(defaulter); ok {
+		d.Default()
 	}
 
-	return o
+	return opt
 }
 
 // ///////////////////////////////////////////////////////////////////////////
 // funcs of OptionTime
 
+type optionTime struct {
+	TimeFormat string
+}
+
+func (o *optionTime) Default() {
+	if o.TimeFormat == "" {
+		o.TimeFormat = time.RFC3339
+	}
+}
+
 func WithTimeFormat(format string) OptionTime {
-	return newOptionHandler(func(o *options) {
+	return func(o *optionTime) {
 		o.TimeFormat = format
-	})
+	}
 }
