@@ -52,6 +52,10 @@ func run(ctx context.Context) error {
 		LastPrice:    decimal.NullDecimal{Valid: true, Decimal: price},
 		Rate:         sql.Null[string]{Valid: true, V: "5.87"},
 		CustomNumber: sql.Null[string]{Valid: true, V: "123456"},
+		Slice:        types.Slice[string]{"a", "b", "c"},
+		Data: types.NewJSON(&handler.Data{
+			X: 123,
+		}),
 	})
 	if err != nil {
 		return err
@@ -73,12 +77,7 @@ func run(ctx context.Context) error {
 		Str("custom_number", train.CustomNumber.V).
 		Msg("Train Get")
 
-	details, err := json.Marshal(train.Details)
-	if err != nil {
-		return err
-	}
-
-	log.Info().RawJSON("details", details).Msg("Train Get Details with RawJSON")
+	jsonLog(train)
 
 	additionals, err := train.Additionals.ToMap()
 	if err != nil {
@@ -91,6 +90,8 @@ func run(ctx context.Context) error {
 	// Update train to set back as null in database
 	train.Details = nil
 	train.Additionals = nil
+	// train.Data.V = nil
+	train.Slice = nil
 
 	trainRaw, err := json.Marshal(train)
 	if err != nil {
@@ -116,6 +117,19 @@ func run(ctx context.Context) error {
 		Str("last_price", train.LastPrice.Decimal.String()).
 		Str("rate", train.Rate.V).
 		Msg("Train Updated")
+
+	jsonLog(train)
+
+	return nil
+}
+
+func jsonLog(v interface{}) error {
+	trainJSON, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	log.Info().RawJSON("train", trainJSON).Msg("Train get with RawJSON")
 
 	return nil
 }

@@ -5,5 +5,7 @@ CREATE TABLE IF NOT EXISTS train (
     price numeric,
     last_price numeric,
     rate numeric,
-    custom_number integer
+    custom_number integer,
+    slice jsonb,
+    data jsonb
 );

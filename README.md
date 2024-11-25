@@ -36,6 +36,30 @@ type Train struct {
 }
 ```
 
+### types.Slice[T]
+
+Slice based on `[]T` and null values stay as nil.
+
+```go
+type Train struct {
+	Slice types.Slice[string] `db:"slice"`
+}
+```
+
+### types.JSON[T]
+
+For any type of json nullable value. Useful for struct values.
+
+```go
+type Details struct {
+	Name string `json:"name"`
+}
+
+type Train struct {
+	Details types.JSON[Details] `db:"details"`
+}
+```
+
 ---
 
 ### string, json.Number OR decimal.Decimal

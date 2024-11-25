@@ -16,4 +16,10 @@ type Train struct {
 	LastPrice    decimal.NullDecimal   `db:"last_price"` // sql.Null[decimal.Decimal] is also usable
 	Rate         sql.Null[string]      `db:"rate"`
 	CustomNumber sql.Null[string]      `db:"custom_number"`
+	Data         types.JSON[*Data]     `db:"data"`
+	Slice        types.Slice[string]   `db:"slice"`
+}
+
+type Data struct {
+	X int `json:"x"`
 }
