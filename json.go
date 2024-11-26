@@ -77,6 +77,12 @@ func (s JSON[T]) MarshalJSON() ([]byte, error) {
 }
 
 func (s *JSON[T]) UnmarshalJSON(data []byte) error {
+	if data == nil || bytes.Equal(data, []byte("null")) {
+		s.V, s.Valid = *new(T), false
+
+		return nil
+	}
+
 	// Parse the JSON data
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.UseNumber()

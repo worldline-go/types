@@ -60,6 +60,10 @@ type Train struct {
 }
 ```
 
+### types.Null[T]
+
+Wrapper of `sql.Null[T]` with additional json marshal and unmarshal methods.
+
 ---
 
 ### string, json.Number OR decimal.Decimal

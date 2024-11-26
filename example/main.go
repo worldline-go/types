@@ -48,10 +48,10 @@ func run(ctx context.Context) error {
 			"peron": 5,
 		},
 		Additionals:  types.RawJSON(`{"key": "value"}`),
-		Price:        sql.Null[json.Number]{Valid: true, V: json.Number(price.String())},
+		Price:        types.Null[json.Number]{Null: sql.Null[json.Number]{Valid: true, V: json.Number(price.String())}},
 		LastPrice:    decimal.NullDecimal{Valid: true, Decimal: price},
-		Rate:         sql.Null[string]{Valid: true, V: "5.87"},
-		CustomNumber: sql.Null[string]{Valid: true, V: "123456"},
+		Rate:         types.Null[string]{Null: sql.Null[string]{Valid: true, V: "5.87"}},
+		CustomNumber: types.Null[string]{Null: sql.Null[string]{Valid: true, V: "123456"}},
 		Slice:        types.Slice[string]{"a", "b", "c"},
 		Data: types.NewJSON(&handler.Data{
 			X: 123,

@@ -73,5 +73,16 @@ func TestJSON(t *testing.T) {
 				t.Error("expected true")
 			}
 		})
+		t.Run("json unmarshal null", func(t *testing.T) {
+			v := JSON[Value]{}
+
+			if err := json.Unmarshal([]byte("null"), &v); err != nil {
+				t.Error(err)
+			}
+
+			if v.Valid {
+				t.Error("expected false")
+			}
+		})
 	})
 }
