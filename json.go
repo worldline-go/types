@@ -67,3 +67,25 @@ func (s JSON[T]) Value() (driver.Value, error) {
 
 	return b, nil
 }
+
+func (s JSON[T]) MarshalJSON() ([]byte, error) {
+	if !s.Valid {
+		return []byte("null"), nil
+	}
+
+	return json.Marshal(s.V)
+}
+
+func (s *JSON[T]) UnmarshalJSON(data []byte) error {
+	// Parse the JSON data
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+
+	if err := decoder.Decode(&s.V); err != nil {
+		return err
+	}
+
+	s.Valid = true
+
+	return nil
+}
