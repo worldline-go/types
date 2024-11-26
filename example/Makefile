@@ -8,6 +8,9 @@ postgres: ## Start a postgres container
 postgres-remove: ## Remove the postgres container
 	docker rm -f postgres
 
+.PHONY: postgres-restart
+postgres-restart: postgres-remove postgres ## Restart the postgres container
+
 .PHONY: run
 run: ## Run the application
 	go run main.go

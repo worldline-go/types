@@ -8,43 +8,43 @@ func TestMap_Scan(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		m       *Map
+		m       *Map[any]
 		args    args
 		wantErr bool
 	}{
 		{
 			name:    "nil",
-			m:       &Map{},
+			m:       &Map[any]{},
 			args:    args{value: nil},
 			wantErr: false,
 		},
 		{
 			name:    "null",
-			m:       &Map{},
+			m:       &Map[any]{},
 			args:    args{value: []byte("null")},
 			wantErr: false,
 		},
 		{
 			name:    "empty",
-			m:       &Map{},
+			m:       &Map[any]{},
 			args:    args{value: []byte("{}")},
 			wantErr: false,
 		},
 		{
 			name:    "invalid",
-			m:       &Map{},
+			m:       &Map[any]{},
 			args:    args{value: []byte("invalid")},
 			wantErr: true,
 		},
 		{
 			name:    "unsupported",
-			m:       &Map{},
+			m:       &Map[any]{},
 			args:    args{value: 42},
 			wantErr: true,
 		},
 		{
 			name:    "nested",
-			m:       &Map{},
+			m:       &Map[any]{},
 			args:    args{value: []byte(`{"key":{"nested":"value"}}`)},
 			wantErr: false,
 		},

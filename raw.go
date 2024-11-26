@@ -36,12 +36,12 @@ func (r RawJSON) Value() (driver.Value, error) {
 	return []byte(r), nil
 }
 
-func (r RawJSON) ToMap() (Map, error) {
+func (r RawJSON) ToMap() (Map[any], error) {
 	if r == nil {
 		return nil, nil
 	}
 
-	m := make(Map)
+	m := make(Map[any])
 
 	if err := m.Scan([]byte(r)); err != nil {
 		return nil, err

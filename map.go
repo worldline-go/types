@@ -7,9 +7,9 @@ import (
 	"fmt"
 )
 
-type Map map[string]interface{}
+type Map[T any] map[string]T
 
-func (m *Map) Scan(value interface{}) error {
+func (m *Map[T]) Scan(value interface{}) error {
 	switch v := value.(type) {
 	case []byte:
 		// Parse the JSON data
@@ -40,7 +40,7 @@ func (m *Map) Scan(value interface{}) error {
 	}
 }
 
-func (m Map) Value() (driver.Value, error) {
+func (m Map[T]) Value() (driver.Value, error) {
 	if m == nil {
 		return nil, nil
 	}

@@ -57,8 +57,8 @@ func StringPtrToTimePtr(v *string, opts ...OptionTime) (*time.Time, error) {
 
 // ////////////////////////////////////////
 
-func BytesToMap(v []byte) (types.Map, error) {
-	m := make(types.Map)
+func BytesToMap(v []byte) (types.Map[any], error) {
+	m := make(types.Map[any])
 
 	if err := m.Scan(v); err != nil {
 		return nil, err
