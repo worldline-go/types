@@ -7,6 +7,14 @@ import (
 	"github.com/worldline-go/types"
 )
 
+func NullToPtr[T any](v types.Null[T]) *T {
+	if v.Valid {
+		return &v.V
+	}
+
+	return nil
+}
+
 func SQLNullToPtr[T any](v sql.Null[T]) *T {
 	if v.Valid {
 		return &v.V
