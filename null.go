@@ -10,6 +10,10 @@ type Null[T any] struct {
 	sql.Null[T]
 }
 
+func NewNull[T any](v T) Null[T] {
+	return Null[T]{Null: sql.Null[T]{V: v, Valid: true}}
+}
+
 func (n Null[T]) MarshalJSON() ([]byte, error) {
 	if !n.Valid {
 		return []byte("null"), nil
