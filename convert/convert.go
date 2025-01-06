@@ -65,6 +65,18 @@ func StringPtrToTimePtr(v *string, opts ...OptionTime) (*time.Time, error) {
 
 // ////////////////////////////////////////
 
+func PtrToZero[T any](v *T) T {
+	if v == nil {
+		return *new(T)
+	}
+
+	return *v
+}
+
+func Ptr[T any](v T) *T {
+	return &v
+}
+
 func BytesToMap(v []byte) (types.Map[any], error) {
 	m := make(types.Map[any])
 
@@ -73,4 +85,10 @@ func BytesToMap(v []byte) (types.Map[any], error) {
 	}
 
 	return m, nil
+}
+
+// ////////////////////////////////////////
+
+func IgnoreErr[T any](v T, _ error) T {
+	return v
 }

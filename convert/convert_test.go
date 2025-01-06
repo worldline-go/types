@@ -76,3 +76,37 @@ func TestTimeFormatPtr(t *testing.T) {
 		})
 	}
 }
+
+func TestPtrToZero(t *testing.T) {
+	t.Run("empty string", func(t *testing.T) {
+		var vPtr *string
+		v := PtrToZero(vPtr)
+		if v != "" {
+			t.Error("expected empty string")
+		}
+	})
+
+	t.Run("empty time", func(t *testing.T) {
+		var vPtr *time.Time
+		v := PtrToZero(vPtr)
+		if !v.IsZero() {
+			t.Error("expected zero time")
+		}
+	})
+
+	t.Run("empty int", func(t *testing.T) {
+		var vPtr *int
+		v := PtrToZero(vPtr)
+		if v != 0 {
+			t.Error("expected zero int")
+		}
+	})
+
+	t.Run("non-empty string", func(t *testing.T) {
+		vPtr := Ptr("hello")
+		v := PtrToZero(vPtr)
+		if v != "hello" {
+			t.Error("expected 'hello'")
+		}
+	})
+}
