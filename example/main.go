@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"time"
 
 	"github.com/rs/zerolog/log"
 	"github.com/shopspring/decimal"
@@ -56,6 +57,7 @@ func run(ctx context.Context) error {
 		Data: types.NewJSON(&handler.Data{
 			X: 123,
 		}),
+		CreatedAt: types.Time{Time: time.Now(), Valid: true},
 	})
 	if err != nil {
 		return err
@@ -75,6 +77,7 @@ func run(ctx context.Context) error {
 		Str("peron", train.Details["peron"].(json.Number).String()).
 		Str("rate", train.Rate.V).
 		Str("custom_number", train.CustomNumber.V).
+		Str("created_at", train.CreatedAt.String()).
 		Msg("Train Get")
 
 	jsonLog(train)
@@ -92,6 +95,7 @@ func run(ctx context.Context) error {
 	train.Additionals = nil
 	// train.Data.V = nil
 	train.Slice = nil
+	train.CreatedAt.Valid = false
 
 	trainRaw, err := json.Marshal(train)
 	if err != nil {

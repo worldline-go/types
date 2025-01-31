@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS train (
     rate numeric,
     custom_number integer,
     slice jsonb,
-    data jsonb
+    data jsonb,
+    created_at timestamp with time zone
 );

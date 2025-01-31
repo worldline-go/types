@@ -66,7 +66,8 @@ Wrapper of `sql.Null[T]` with additional json marshal and unmarshal methods.
 
 ### types.Time
 
-Wrapper of `time.Time` with additional json marshal and unmarshal methods.
+Wrapper of `time.Time` with additional json marshal and unmarshal methods with database scan and value methods.  
+It support null values.
 
 ---
 
