@@ -64,6 +64,10 @@ type Train struct {
 
 Wrapper of `sql.Null[T]` with additional json marshal and unmarshal methods.
 
+### types.Time
+
+Wrapper of `time.Time` with additional json marshal and unmarshal methods.
+
 ---
 
 ### string, json.Number OR decimal.Decimal
