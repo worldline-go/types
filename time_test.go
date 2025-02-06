@@ -25,12 +25,14 @@ func TestTime_UnmarshalJSON(t *testing.T) {
 				[]byte(`2025-01-31T09:41:17Z`),
 				[]byte(`2025-01-31T10:41:55+01:00`),
 				[]byte(`2025-01-31T09:43:00.3Z`),
+				[]byte(`null`),
+				nil,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var tr NullTime
+			var tr Time
 			for _, arg := range tt.args {
 				if err := tr.UnmarshalJSON(arg); (err != nil) != tt.wantErr {
 					t.Errorf("Time.UnmarshalJSON() error = %v, wantErr %v", err, tt.wantErr)
