@@ -9,6 +9,19 @@ import (
 
 type Map[T any] map[string]T
 
+func (m *Map[T]) UnmarshalJSON(data []byte) error {
+	type new Map[T]
+
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+
+	if err := decoder.Decode((*new)(m)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m *Map[T]) Scan(value interface{}) error {
 	switch v := value.(type) {
 	case []byte:
