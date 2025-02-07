@@ -17,31 +17,19 @@ var timeFormats = []string{
 
 type Time struct {
 	time.Time
-	Valid bool
 }
 
 func (t Time) MarshalJSON() ([]byte, error) {
-	if !t.Valid {
-		return []byte("null"), nil
-	}
-
 	return []byte(`"` + t.Time.Format(time.RFC3339) + `"`), nil
 }
 
 func (t *Time) UnmarshalJSON(data []byte) error {
 	s := strings.Trim(string(data), `"`)
 
-	if s == "null" || s == "" {
-		t.Time = time.Time{}
-
-		return nil
-	}
-
 	for _, format := range timeFormats {
 		tt, err := time.Parse(format, s)
 		if err == nil {
 			t.Time = tt
-			t.Valid = true
 
 			return nil
 		}
@@ -55,7 +43,6 @@ func (t *Time) Parse(s string) error {
 		tt, err := time.Parse(format, s)
 		if err == nil {
 			t.Time = tt
-			t.Valid = true
 
 			return nil
 		}
@@ -76,16 +63,16 @@ func (t *Time) Scan(value any) error {
 		return err
 	}
 
-	t.Time, t.Valid = v.Time, v.Valid
+	if v.Valid {
+		t.Time = v.Time
 
-	return nil
+		return nil
+	}
+
+	return fmt.Errorf("cannot scan [%v] into Time", value)
 }
 
 // Value implements the [driver.Valuer] interface.
 func (t Time) Value() (driver.Value, error) {
-	if !t.Valid {
-		return nil, nil
-	}
-
 	return t.Time, nil
 }

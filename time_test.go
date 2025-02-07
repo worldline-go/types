@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 )
@@ -25,8 +26,6 @@ func TestTime_UnmarshalJSON(t *testing.T) {
 				[]byte(`2025-01-31T09:41:17Z`),
 				[]byte(`2025-01-31T10:41:55+01:00`),
 				[]byte(`2025-01-31T09:43:00.3Z`),
-				[]byte(`null`),
-				nil,
 			},
 		},
 	}
@@ -39,5 +38,30 @@ func TestTime_UnmarshalJSON(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestTime_UnmarshalJSON_Struct(t *testing.T) {
+	value := []byte(`{}`)
+
+	type TimeStruct struct {
+		Time Time `json:"time"`
+	}
+
+	var ts TimeStruct
+
+	if err := json.Unmarshal(value, &ts); err != nil {
+		t.Errorf("Time.UnmarshalJSON() error = %v", err)
+	}
+
+	value = []byte(`{"time": null}`)
+	type TimeStruct2 struct {
+		Time Null[Time] `json:"time"`
+	}
+
+	var ts2 TimeStruct2
+
+	if err := json.Unmarshal(value, &ts2); err != nil {
+		t.Errorf("Time.UnmarshalJSON() error = %v", err)
 	}
 }

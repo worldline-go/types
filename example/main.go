@@ -57,7 +57,7 @@ func run(ctx context.Context) error {
 		Data: types.NewJSON(&handler.Data{
 			X: 123,
 		}),
-		CreatedAt: types.Time{Time: time.Now(), Valid: true},
+		CreatedAt: types.NewNull(types.Time{Time: time.Now()}),
 	})
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func run(ctx context.Context) error {
 		Str("peron", train.Details["peron"].(json.Number).String()).
 		Str("rate", train.Rate.V).
 		Str("custom_number", train.CustomNumber.V).
-		Str("created_at", train.CreatedAt.String()).
+		Str("created_at", train.CreatedAt.V.String()).
 		Msg("Train Get")
 
 	jsonLog(train)

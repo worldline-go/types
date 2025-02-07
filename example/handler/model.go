@@ -17,7 +17,7 @@ type Train struct {
 	CustomNumber types.Null[string]      `db:"custom_number"`
 	Data         types.JSON[*Data]       `db:"data"`
 	Slice        types.Slice[string]     `db:"slice"`
-	CreatedAt    types.Time              `db:"created_at"`
+	CreatedAt    types.Null[types.Time]  `db:"created_at"`
 }
 
 type Data struct {
