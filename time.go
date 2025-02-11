@@ -13,6 +13,8 @@ var timeFormats = []string{
 	time.RFC3339Nano, // RFC3339 with nanoseconds
 	time.DateTime,    // DateTime
 	time.DateOnly,    // Date only
+	"2006-01-02T15:04:05",
+	"2006-01-02 15:04:05.000000",
 }
 
 type Time struct {
