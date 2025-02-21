@@ -14,6 +14,14 @@ func NewNull[T any](v T) Null[T] {
 	return Null[T]{Null: sql.Null[T]{V: v, Valid: true}}
 }
 
+func (n Null[T]) Ptr() *T {
+	if !n.Valid {
+		return nil
+	}
+
+	return &n.V
+}
+
 func (n Null[T]) MarshalJSON() ([]byte, error) {
 	if !n.Valid {
 		return []byte("null"), nil

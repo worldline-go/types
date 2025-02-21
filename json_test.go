@@ -84,5 +84,20 @@ func TestJSON(t *testing.T) {
 				t.Error("expected false")
 			}
 		})
+
+		t.Run("json marshal number", func(t *testing.T) {
+			v := map[string]interface{}{
+				"name": json.Number("1"),
+			}
+
+			res, err := json.Marshal(v)
+			if err != nil {
+				t.Error(err)
+			}
+
+			if string(res) != `{"name":1}` {
+				t.Error("expected false")
+			}
+		})
 	})
 }
