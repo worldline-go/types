@@ -42,3 +42,11 @@ func validateNullDecimal(field reflect.Value) interface{} {
 
 	return nil
 }
+
+// Struct validates a structs exposed fields, and automatically validates nested structs, unless otherwise specified.
+//
+// It returns InvalidValidationError for bad values passed in and nil or ValidationErrors as error otherwise.
+// You will need to assert the error if it's not nil eg. err.(validator.ValidationErrors) to access the array of errors.
+func Struct(s interface{}) error {
+	return V.Struct(s)
+}
