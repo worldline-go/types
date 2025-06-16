@@ -7,3 +7,8 @@ import "github.com/shopspring/decimal"
 func init() {
 	decimal.MarshalJSONWithoutQuotes = true
 }
+
+type (
+	Decimal     = decimal.Decimal
+	NullDecimal = decimal.NullDecimal
+)
