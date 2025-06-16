@@ -10,14 +10,18 @@ type Null[T any] struct {
 	sql.Null[T]
 }
 
+// NewNull creates a Null[T] with the given value and Valid set to true.
 func NewNull[T any](v T) Null[T] {
 	return Null[T]{Null: sql.Null[T]{V: v, Valid: true}}
 }
 
+// NewNullWithValid creates a Null[T] with the given value and Valid set to the specified boolean.
 func NewNullWithValid[T any](v T, valid bool) Null[T] {
 	return Null[T]{Null: sql.Null[T]{V: v, Valid: valid}}
 }
 
+// NewNullFromPtr creates a Null[T] from a pointer to T.
+//   - If the pointer is nil, it returns a Null[T] with Valid set to false and V set to the zero value of T.
 func NewNullFromPtr[T any](v *T) Null[T] {
 	if v == nil {
 		var zero T
@@ -28,6 +32,7 @@ func NewNullFromPtr[T any](v *T) Null[T] {
 	return Null[T]{Null: sql.Null[T]{V: *v, Valid: true}}
 }
 
+// Ptr returns a pointer to the inner value if Valid is true, otherwise it returns nil.
 func (n Null[T]) Ptr() *T {
 	if !n.Valid {
 		return nil

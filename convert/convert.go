@@ -1,7 +1,9 @@
 package convert
 
 import (
+	"bytes"
 	"database/sql"
+	"encoding/json"
 	"time"
 
 	"github.com/worldline-go/types"
@@ -91,4 +93,21 @@ func BytesToMap(v []byte) (types.Map[any], error) {
 
 func IgnoreErr[T any](v T, _ error) T {
 	return v
+}
+
+// ////////////////////////////////////////
+
+// RawTo converts a byte slice to a type T using JSON decoding.
+func RawTo[T any](v []byte) (*T, error) {
+	t := new(T)
+
+	// Parse the JSON data
+	decoder := json.NewDecoder(bytes.NewReader(v))
+	decoder.UseNumber()
+
+	if err := decoder.Decode(t); err != nil {
+		return nil, err
+	}
+
+	return t, nil
 }

@@ -9,10 +9,10 @@ import (
 )
 
 var timeFormats = []string{
-	time.RFC3339,     // RFC3339
-	time.RFC3339Nano, // RFC3339 with nanoseconds
-	time.DateTime,    // DateTime
-	time.DateOnly,    // Date only
+	time.RFC3339,
+	time.RFC3339Nano,
+	time.DateTime,
+	time.DateOnly,
 	"2006-01-02T15:04:05",
 	"2006-01-02 15:04:05.000000",
 }

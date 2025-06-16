@@ -1,6 +1,7 @@
 package convert
 
 import (
+	"reflect"
 	"testing"
 	"time"
 )
@@ -109,4 +110,51 @@ func TestPtrToZero(t *testing.T) {
 			t.Error("expected 'hello'")
 		}
 	})
+}
+func TestRawTo_CustomStruct(t *testing.T) {
+	type Custom struct {
+		ID    int    `json:"id"`
+		Name  string `json:"name"`
+		Valid bool   `json:"valid"`
+	}
+
+	jsonData := []byte(`{"id":42,"name":"test","valid":true}`)
+
+	got, err := RawTo[Custom](jsonData)
+	if err != nil {
+		t.Fatalf("RawTo() error = %v", err)
+	}
+
+	want := &Custom{ID: 42, Name: "test", Valid: true}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("RawTo() = %+v, want %+v", got, want)
+	}
+}
+
+func TestRawTo_InvalidJSON(t *testing.T) {
+	type Custom struct {
+		ID int `json:"id"`
+	}
+	invalidJSON := []byte(`{"id":`)
+
+	_, err := RawTo[Custom](invalidJSON)
+	if err == nil {
+		t.Error("expected error for invalid JSON, got nil")
+	}
+}
+
+func TestPtr(t *testing.T) {
+	val := 123
+	ptr := Ptr(val)
+	if ptr == nil || *ptr != val {
+		t.Errorf("Ptr() = %v, want %v", ptr, val)
+	}
+}
+
+func TestIgnoreErr(t *testing.T) {
+	val := "hello"
+	got := IgnoreErr(val, nil)
+	if got != val {
+		t.Errorf("IgnoreErr() = %v, want %v", got, val)
+	}
 }
