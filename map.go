@@ -66,3 +66,16 @@ func (m Map[T]) Value() (driver.Value, error) {
 
 	return b, nil
 }
+
+func (m Map[T]) ToRawJSON() (RawJSON, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	b, err := json.Marshal(m)
+	if err != nil {
+		return nil, err
+	}
+
+	return RawJSON(b), nil
+}

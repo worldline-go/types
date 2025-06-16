@@ -78,3 +78,25 @@ func (t *Time) Scan(value any) error {
 func (t Time) Value() (driver.Value, error) {
 	return t.Time, nil
 }
+
+// /////////////////////////////////
+
+func NewTime(t time.Time) Time {
+	return Time{Time: t}
+}
+
+func NewTimeNull(t time.Time) Null[Time] {
+	return NewNull(Time{Time: t})
+}
+
+func NewTimeNullWithValid(t time.Time, valid bool) Null[Time] {
+	return NewNullWithValid(Time{Time: t}, valid)
+}
+
+func NewTimeFromPtr(t *time.Time) Null[Time] {
+	if t == nil {
+		return NewNullFromPtr[Time](nil)
+	}
+
+	return NewNullFromPtr(&Time{Time: *t})
+}
