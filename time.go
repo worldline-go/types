@@ -93,7 +93,7 @@ func NewTimeNullWithValid(t time.Time, valid bool) Null[Time] {
 	return NewNullWithValid(Time{Time: t}, valid)
 }
 
-func NewTimeFromPtr(t *time.Time) Null[Time] {
+func NewTimeNullFromPtr(t *time.Time) Null[Time] {
 	if t == nil {
 		return NewNullFromPtr[Time](nil)
 	}
