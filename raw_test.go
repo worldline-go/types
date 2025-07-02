@@ -50,3 +50,23 @@ func TestRawJSON_Nested(t *testing.T) {
 		t.Error("invalid json")
 	}
 }
+
+func TestRawJson_Null(t *testing.T) {
+	type post struct {
+		Title   string  `json:"title"`
+		Details RawJSON `json:"details"`
+	}
+
+	p := post{
+		Title: "Title",
+	}
+
+	b, err := json.Marshal(p)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if string(b) != `{"title":"Title","details":null}` {
+		t.Error("invalid json")
+	}
+}

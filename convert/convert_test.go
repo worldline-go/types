@@ -131,6 +131,23 @@ func TestRawTo_CustomStruct(t *testing.T) {
 	}
 }
 
+func TestRawTo_CustomStructNil(t *testing.T) {
+	type Custom struct {
+		ID int `json:"id"`
+	}
+
+	jsonData := []byte(``)
+
+	got, err := RawTo[Custom](jsonData)
+	if err != nil {
+		t.Fatalf("RawTo() error = %v", err)
+	}
+
+	if got.ID != 0 {
+		t.Errorf("RawTo() = %+v, want %+v", got, &Custom{ID: 0})
+	}
+}
+
 func TestRawTo_InvalidJSON(t *testing.T) {
 	type Custom struct {
 		ID int `json:"id"`
