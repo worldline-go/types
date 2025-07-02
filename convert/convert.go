@@ -101,7 +101,7 @@ func IgnoreErr[T any](v T, _ error) T {
 func RawTo[T any](v []byte) (*T, error) {
 	t := new(T)
 
-	if v == nil || len(v) == 0 {
+	if len(v) == 0 {
 		return t, nil
 	}
 
