@@ -22,7 +22,7 @@ type Time struct {
 }
 
 func (t Time) MarshalJSON() ([]byte, error) {
-	return t.Time.Truncate(time.Microsecond).MarshalJSON()
+	return t.Time.MarshalJSON()
 }
 
 func (t *Time) UnmarshalJSON(data []byte) error {
