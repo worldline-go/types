@@ -9,8 +9,8 @@ import (
 )
 
 var timeFormats = []string{
-	time.RFC3339,
 	time.RFC3339Nano,
+	time.RFC3339,
 	time.DateTime,
 	time.DateOnly,
 	"2006-01-02T15:04:05",
@@ -22,7 +22,7 @@ type Time struct {
 }
 
 func (t Time) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + t.Time.Format(time.RFC3339) + `"`), nil
+	return t.Time.MarshalJSON()
 }
 
 func (t *Time) UnmarshalJSON(data []byte) error {
