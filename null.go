@@ -8,6 +8,9 @@ import (
 
 type Null[T any] struct {
 	sql.Null[T]
+	// ParsedNull is a helper field to distinguish between a null value and an omitted field during JSON unmarshalling.
+	//  - if the field is present in the JSON (even if it's null), ParsedNull will be true.
+	ParsedNull bool `json:"-"`
 }
 
 // NewNull creates a Null[T] with the given value and Valid set to true.
@@ -62,7 +65,7 @@ func (n Null[T]) MarshalJSON() ([]byte, error) {
 
 func (n *Null[T]) UnmarshalJSON(data []byte) error {
 	if data == nil || bytes.Equal(data, []byte("null")) {
-		n.V, n.Valid = *new(T), false
+		n.V, n.Valid, n.ParsedNull = *new(T), false, true
 
 		return nil
 	}
@@ -76,6 +79,18 @@ func (n *Null[T]) UnmarshalJSON(data []byte) error {
 	}
 
 	n.Valid = true
+
+	return nil
+}
+
+func (n *Null[T]) Scan(value any) error {
+	if err := n.Null.Scan(value); err != nil {
+		return err
+	}
+
+	if !n.Valid {
+		n.ParsedNull = true
+	}
 
 	return nil
 }
