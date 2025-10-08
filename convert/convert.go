@@ -80,6 +80,10 @@ func Ptr[T any](v T) *T {
 }
 
 func BytesToMap(v []byte) (types.Map[any], error) {
+	if len(v) == 0 {
+		return nil, nil
+	}
+
 	m := make(types.Map[any])
 
 	if err := m.Scan(v); err != nil {

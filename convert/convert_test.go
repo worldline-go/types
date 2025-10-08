@@ -175,3 +175,14 @@ func TestIgnoreErr(t *testing.T) {
 		t.Errorf("IgnoreErr() = %v, want %v", got, val)
 	}
 }
+
+func TestBytesToMap(t *testing.T) {
+	var jsonData []byte
+	got, err := BytesToMap(jsonData)
+	if err != nil {
+		t.Fatalf("BytesToMap() error = %v", err)
+	}
+	if got != nil {
+		t.Errorf("BytesToMap() = %v, want nil", got)
+	}
+}
