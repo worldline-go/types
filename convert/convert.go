@@ -119,3 +119,19 @@ func RawTo[T any](v []byte) (*T, error) {
 
 	return t, nil
 }
+
+func RawToNull[T any](v []byte) (types.Null[T], error) {
+	result := types.Null[T]{}
+	if len(v) == 0 {
+		return result, nil
+	}
+
+	decoder := json.NewDecoder(bytes.NewReader(v))
+	decoder.UseNumber()
+
+	if err := decoder.Decode(&result); err != nil {
+		return types.Null[T]{}, err
+	}
+
+	return result, nil
+}

@@ -1,9 +1,12 @@
 package convert
 
 import (
+	"database/sql"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/worldline-go/types"
 )
 
 func TestTimeFormatPtr(t *testing.T) {
@@ -185,4 +188,119 @@ func TestBytesToMap(t *testing.T) {
 	if got != nil {
 		t.Errorf("BytesToMap() = %v, want nil", got)
 	}
+}
+
+func TestRawToNull(t *testing.T) {
+	type tt struct {
+		Name  *string            `json:"name"`
+		Value types.Null[string] `json:"value"`
+	}
+
+	t.Run("null test", func(t *testing.T) {
+		jsonData := []byte(`{"name": "example", "value": null}`)
+
+		got, err := RawToNull[tt](jsonData)
+		if err != nil {
+			t.Fatalf("RawToNull() error = %v", err)
+		}
+
+		want := tt{
+			Name:  Ptr("example"),
+			Value: types.Null[string]{ParsedNull: true, Null: sql.Null[string]{Valid: false}},
+		}
+
+		if *got.V.Name != *want.Name {
+			t.Errorf("RawToNull() Name = %v, want %v", got.V.Name, *want.Name)
+		}
+
+		if !reflect.DeepEqual(got.V.Value, want.Value) {
+			t.Errorf("RawToNull() Value = %v, want %v", got.V.Value, want.Value)
+		}
+	})
+
+	t.Run("empty byte", func(t *testing.T) {
+		var jsonData []byte
+
+		got, err := RawToNull[tt](jsonData)
+		if err != nil {
+			t.Fatalf("RawToNull() error = %v", err)
+		}
+
+		want := tt{}
+
+		if got.V.Name != nil {
+			t.Errorf("RawToNull() Name = %v, want nil", got.V.Name)
+		}
+
+		if got.Valid {
+			t.Errorf("RawToNull() Valid = %v, want false", got.Valid)
+		}
+
+		if !reflect.DeepEqual(got.V.Value, want.Value) {
+			t.Errorf("RawToNull() Value = %v, want %v", got.V.Value, want.Value)
+		}
+	})
+
+	t.Run("null byte", func(t *testing.T) {
+		jsonData := []byte(`null`)
+
+		got, err := RawToNull[tt](jsonData)
+		if err != nil {
+			t.Fatalf("RawToNull() error = %v", err)
+		}
+
+		want := tt{}
+
+		if got.V.Name != nil {
+			t.Errorf("RawToNull() Name = %v, want nil", got.V.Name)
+		}
+
+		if got.Valid {
+			t.Errorf("RawToNull() Valid = %v, want false", got.Valid)
+		}
+
+		if !got.ParsedNull {
+			t.Errorf("RawToNull() ParsedNull = %v, want true", got.ParsedNull)
+		}
+
+		if !reflect.DeepEqual(got.V.Value, want.Value) {
+			t.Errorf("RawToNull() Value = %v, want %v", got.V.Value, want.Value)
+		}
+	})
+
+	t.Run("dummy byte", func(t *testing.T) {
+		jsonData := []byte(`{"test": 1234}`)
+
+		got, err := RawToNull[tt](jsonData)
+		if err != nil {
+			t.Fatalf("RawToNull() error = %v", err)
+		}
+
+		want := tt{}
+
+		if got.V.Name != nil {
+			t.Errorf("RawToNull() Name = %v, want nil", got.V.Name)
+		}
+
+		if !got.Valid {
+			t.Errorf("RawToNull() Valid = %v, want true", got.Valid)
+		}
+
+		if got.ParsedNull {
+			t.Errorf("RawToNull() ParsedNull = %v, want false", got.ParsedNull)
+		}
+
+		if !reflect.DeepEqual(got.V.Value, want.Value) {
+			t.Errorf("RawToNull() Value = %v, want %v", got.V.Value, want.Value)
+		}
+	})
+
+	t.Run("fail byte", func(t *testing.T) {
+		jsonData := []byte(`ddddd`)
+
+		_, err := RawToNull[tt](jsonData)
+		if err == nil {
+			t.Fatalf("RawToNull() error = %v", err)
+		}
+	})
 }
