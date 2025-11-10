@@ -64,4 +64,9 @@ func TestTime_UnmarshalJSON_Struct(t *testing.T) {
 	if err := json.Unmarshal(value, &ts2); err != nil {
 		t.Errorf("Time.UnmarshalJSON() error = %v", err)
 	}
+
+	var ts3 TimeStruct
+	if err := json.Unmarshal(value, &ts3); err != nil {
+		t.Errorf("Time.UnmarshalJSON() error = %v", err)
+	}
 }

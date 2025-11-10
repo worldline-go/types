@@ -28,6 +28,13 @@ func (t Time) MarshalJSON() ([]byte, error) {
 func (t *Time) UnmarshalJSON(data []byte) error {
 	s := strings.Trim(string(data), `"`)
 
+	// check if null, protect against invalid time parsing
+	if s == "null" {
+		t.Time = time.Time{}
+
+		return nil
+	}
+
 	for _, format := range timeFormats {
 		tt, err := time.Parse(format, s)
 		if err == nil {
